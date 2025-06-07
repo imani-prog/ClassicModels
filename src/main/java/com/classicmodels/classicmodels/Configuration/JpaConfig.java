@@ -15,8 +15,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@EnableJpaRepositories(basePackages = "com.classicmodels.classicmodels.Repository")
-@EntityScan(basePackages = "com.classicmodels.classicmodels.model")
+//@EnableJpaRepositories(basePackages = "com.classicmodels.classicmodels.Repository")
+@EntityScan(basePackages = "com.classicmodels.classicmodels.Entities")
 public class JpaConfig {
 
     @Autowired
@@ -35,4 +35,5 @@ public class JpaConfig {
     public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
         return new JpaTransactionManager(emf);
     }
+
 }
