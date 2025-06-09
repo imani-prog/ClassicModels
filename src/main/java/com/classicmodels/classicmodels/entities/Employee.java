@@ -1,4 +1,4 @@
-package com.classicmodels.classicmodels.Entities;
+package com.classicmodels.classicmodels.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

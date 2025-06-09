@@ -1,6 +1,6 @@
-package com.classicmodels.classicmodels.Repository;
+package com.classicmodels.classicmodels.repository;
 
-import com.classicmodels.classicmodels.Entities.Office;
+import com.classicmodels.classicmodels.entities.Office;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

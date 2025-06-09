@@ -1,4 +1,4 @@
-package com.classicmodels.classicmodels.Configuration;
+package com.classicmodels.classicmodels.configuration;
 
 
 import jakarta.persistence.EntityManagerFactory;
@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -16,7 +15,7 @@ import javax.sql.DataSource;
 
 @Configuration
 //@EnableJpaRepositories(basePackages = "com.classicmodels.classicmodels.Repository")
-@EntityScan(basePackages = "com.classicmodels.classicmodels.Entities")
+@EntityScan(basePackages = "com.classicmodels.classicmodels.entities")
 public class JpaConfig {
 
     @Autowired

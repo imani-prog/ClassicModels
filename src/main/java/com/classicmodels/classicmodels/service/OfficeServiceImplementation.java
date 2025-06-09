@@ -1,7 +1,7 @@
-package com.classicmodels.classicmodels.Service;
+package com.classicmodels.classicmodels.service;
 
-import com.classicmodels.classicmodels.Entities.Office;
-import com.classicmodels.classicmodels.Repository.OfficeRepository;
+import com.classicmodels.classicmodels.entities.Office;
+import com.classicmodels.classicmodels.repository.OfficeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

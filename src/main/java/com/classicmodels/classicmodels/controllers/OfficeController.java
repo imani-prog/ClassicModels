@@ -1,7 +1,7 @@
-package com.classicmodels.classicmodels.Controllers;
+package com.classicmodels.classicmodels.controllers;
 
-import com.classicmodels.classicmodels.Entities.Office;
-import com.classicmodels.classicmodels.Service.OfficeService;
+import com.classicmodels.classicmodels.entities.Office;
+import com.classicmodels.classicmodels.service.OfficeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
