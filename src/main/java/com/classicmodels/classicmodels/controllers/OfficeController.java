@@ -10,12 +10,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/offices")
 @RequiredArgsConstructor
 public class OfficeController {
+
+
     private final OfficeService officeService;
 
     @PostMapping("/save")
     public ResponseEntity<Office> saveOffice(@RequestBody Office office) {
         Office savedOffice = officeService.saveOffice(office);
-        return ResponseEntity.ok(savedOffice);
+        return ResponseEntity.ok(new Office());
     }
 
 
