@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class OfficeServiceImplementation implements  OfficeService {
     private final OfficeRepository officeRepository;
+
+
     @Override
     public Office saveOffice(Office office) {
         office.setOfficeCode(generateOfficeId());
