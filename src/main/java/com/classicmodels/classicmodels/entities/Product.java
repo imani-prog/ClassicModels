@@ -41,4 +41,6 @@ public class Product {
     @Column(name = "MSRP", nullable = false, precision = 10, scale = 2)
     private BigDecimal msrp;
 
+    public void setId(Integer integer) {
+    }
 }
