@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/offices")
 @RequiredArgsConstructor
@@ -18,6 +20,22 @@ public class OfficeController {
     public ResponseEntity<Office> saveOffice(@RequestBody Office office) {
         Office savedOffice = officeService.saveOffice(office);
         return ResponseEntity.ok(new Office());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<Office>> getAllOffices() {
+        List<Office> offices = officeService.getAllOffices();
+        return ResponseEntity.ok(offices);
+    }
+
+    @GetMapping("/{id}")
+    public  ResponseEntity<Office> getOfficeById(@PathVariable String id) {
+        Office office = officeService.getOfficeById(id);
+        if (office != null) {
+            return ResponseEntity.ok(office);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

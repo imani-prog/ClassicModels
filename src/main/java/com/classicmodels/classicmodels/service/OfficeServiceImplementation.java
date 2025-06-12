@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,18 @@ public class OfficeServiceImplementation implements  OfficeService {
         } else {
             return officeCode;
         }
+    }
+
+    @Override
+    public List<Office> getAllOffices() {
+        log.info("Fetching all offices from the database");
+        return officeRepository.findAll();
+    }
+
+
+    @Override
+    public Office getOfficeById(String id) {
+        return officeRepository.findById(id).orElse(null);
     }
 
 //    @Override
