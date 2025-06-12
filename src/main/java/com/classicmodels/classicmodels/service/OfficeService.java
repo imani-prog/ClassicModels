@@ -12,4 +12,9 @@ public interface OfficeService {
 
     List<Office> getAllOffices();
     Office getOfficeById(String id);
+
+    void deleteOffice(Office office);
+
+    void deleteOfficeById(String officeCode);
+
 }

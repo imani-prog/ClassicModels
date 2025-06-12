@@ -38,5 +38,15 @@ public class OfficeController {
         }
     }
 
+//    @DeleteMapping
+//    public ResponseEntity<Office> deleteOffice(@RequestBody Office office) {
+//        officeService.deleteOffice(office);
+//        return ResponseEntity.ok(office);
+//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteOffice(@PathVariable String id) {
+        officeService.deleteOfficeById(id);
+        return ResponseEntity.noContent().build();
+    }
 
 }

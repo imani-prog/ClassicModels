@@ -24,10 +24,25 @@ public class OfficeServiceImplementation implements  OfficeService {
 
     @Override
     public Office saveOffice(Office office) {
-        office.setOfficeCode(generateOfficeId());
-        log.info("\nSaving office with code: {}", office.getOfficeCode());
-        return officeRepository.save(office);
+        try {
+            office.setOfficeCode(generateOfficeId());
+            log.info("\nSaving office with code: {}", office.getOfficeCode());
+            return officeRepository.save(office);
+        } catch (Exception e) {
+            log.error("Failed to save office: {}", e.getMessage(), e);
+            return null;
+        }
     }
+
+
+
+
+//    @Override
+//    public Office saveOffice(Office office) {
+//        office.setOfficeCode(generateOfficeId());
+//        log.info("\nSaving office with code: {}", office.getOfficeCode());
+//        return officeRepository.save(office);
+//    }
 
 
     @Override
@@ -51,6 +66,18 @@ public class OfficeServiceImplementation implements  OfficeService {
     public Office getOfficeById(String id) {
         return officeRepository.findById(id).orElse(null);
     }
+
+    @Override
+    public void deleteOffice(Office office) {
+        log.info("Deleting office with code: {}", office.getOfficeCode());
+        officeRepository.delete(office);
+    }
+
+    @Override
+    public void deleteOfficeById(String officeCode) {
+        officeRepository.deleteById(officeCode);
+    }
+
 
 //    @Override
 //    public String generateOfficeId() {
