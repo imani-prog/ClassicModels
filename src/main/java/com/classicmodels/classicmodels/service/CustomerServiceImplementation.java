@@ -26,4 +26,16 @@ public class CustomerServiceImplementation  implements CustomerService {
         log.info("\nGenerated customer number: {}", customerNumber);
         return customerNumber;
     }
+
+    @Override
+    public Customer getCustomerById(Integer id) {
+        log.info("Fetching customer with ID: {}", id);
+        return customerRepository.findById(Integer.valueOf(id)).orElse(null);
+    }
+
+//    @Override
+//    public void deleteCustomerById(Integer id) {
+//        log.info("Deleting customer with ID: {}", id);
+//        customerRepository.deleteById(id);
+//    }
 }
