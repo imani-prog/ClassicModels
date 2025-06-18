@@ -17,4 +17,7 @@ public interface OfficeService {
 
     void deleteOfficeById(String officeCode);
 
+    Office updateOffice(String id, Office officeDetails);
+
+    List<Office> searchOffices(String city, String country);
 }

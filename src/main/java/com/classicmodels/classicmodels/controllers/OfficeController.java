@@ -38,15 +38,27 @@ public class OfficeController {
         }
     }
 
-//    @DeleteMapping
-//    public ResponseEntity<Office> deleteOffice(@RequestBody Office office) {
-//        officeService.deleteOffice(office);
-//        return ResponseEntity.ok(office);
-//    }
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteOffice(@PathVariable String id) {
         officeService.deleteOfficeById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Office> updateOffice(@PathVariable String id, @RequestBody Office officeDetails) {
+        try {
+            Office updated = officeService.updateOffice(id, officeDetails);
+            return ResponseEntity.ok(updated);
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<Office>> searchOffices(@RequestParam(required = false) String city,
+                                                     @RequestParam(required = false) String country) {
+        List<Office> offices = officeService.searchOffices(city, country);
+        return ResponseEntity.ok(offices);
     }
 
 }

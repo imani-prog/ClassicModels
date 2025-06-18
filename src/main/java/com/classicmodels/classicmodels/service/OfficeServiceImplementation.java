@@ -84,4 +84,32 @@ public class OfficeServiceImplementation implements  OfficeService {
 //        return "OFF-"+ String.valueOf(System.currentTimeMillis());
 //    }
 
+    @Override
+    public Office updateOffice(String id, Office officeDetails) {
+        Office existingOffice = officeRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Office not found with id: " + id));
+        existingOffice.setCity(officeDetails.getCity());
+        existingOffice.setPhone(officeDetails.getPhone());
+        existingOffice.setAddressLine1(officeDetails.getAddressLine1());
+        existingOffice.setAddressLine2(officeDetails.getAddressLine2());
+        existingOffice.setState(officeDetails.getState());
+        existingOffice.setCountry(officeDetails.getCountry());
+        existingOffice.setPostalCode(officeDetails.getPostalCode());
+        existingOffice.setTerritory(officeDetails.getTerritory());
+        return officeRepository.save(existingOffice);
+    }
+
+    @Override
+    public List<Office> searchOffices(String city, String country) {
+        if (city != null && !city.isEmpty() && country != null && !country.isEmpty()) {
+            return officeRepository.findByCityIgnoreCaseAndCountryIgnoreCase(city, country);
+        } else if (city != null && !city.isEmpty()) {
+            return officeRepository.findByCityIgnoreCase(city);
+        } else if (country != null && !country.isEmpty()) {
+            return officeRepository.findByCountryIgnoreCase(country);
+        } else {
+            return officeRepository.findAll();
+        }
+    }
+
 }
