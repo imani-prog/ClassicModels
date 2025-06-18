@@ -1,5 +1,6 @@
 package com.classicmodels.classicmodels.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "productlines")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Productline {
     @Id
     @Column(name = "productLine", nullable = false, length = 50)
