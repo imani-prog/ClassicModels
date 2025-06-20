@@ -48,4 +48,33 @@ public class ProductServiceImplementation implements ProductService {
             return productRepository.findAll();
         }
     }
+
+    @Override
+    public List<Product> getAllProducts() {
+        return productRepository.findAll();
+    }
+
+    @Override
+    public Product updateProduct(String id, Product product) {
+        return productRepository.findById(id).map(existingProduct -> {
+            existingProduct.setProductName(product.getProductName());
+            existingProduct.setProductLine(product.getProductLine());
+            existingProduct.setProductScale(product.getProductScale());
+            existingProduct.setProductVendor(product.getProductVendor());
+            existingProduct.setProductDescription(product.getProductDescription());
+            existingProduct.setQuantityInStock(product.getQuantityInStock());
+            existingProduct.setBuyPrice(product.getBuyPrice());
+            existingProduct.setMsrp(product.getMsrp());
+            return productRepository.save(existingProduct);
+        }).orElse(null);
+    }
+
+    @Override
+    public boolean deleteProduct(String id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
+            return true;
+        }
+        return false;
+    }
 }

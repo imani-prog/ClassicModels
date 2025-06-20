@@ -10,4 +10,8 @@ public interface ProductService {
     Product getProductById(String id);
 
     List<Product> searchProducts(String productName, String productLine, String productVendor);
+
+    List<Product> getAllProducts();
+    Product updateProduct(String id, Product product);
+    boolean deleteProduct(String id);
 }
