@@ -19,7 +19,13 @@ public class ProductController {
     @PostMapping("/save")
     public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
         Product savedProduct = productService.saveProduct(product);
-        return ResponseEntity.ok(new Product());
+        return ResponseEntity.ok(savedProduct);
+    }
+
+    @PostMapping
+    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+        Product savedProduct = productService.saveProduct(product);
+        return ResponseEntity.ok(savedProduct);
     }
 
     @GetMapping("/{id}")

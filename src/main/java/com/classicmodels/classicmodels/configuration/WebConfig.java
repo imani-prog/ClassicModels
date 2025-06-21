@@ -15,12 +15,18 @@ public class WebConfig implements WebMvcConfigurer {
         log.info("CorsMapping enabled");
 
         registry.addMapping("/api/**")
-                .allowedOriginPatterns("*")
+                .allowedOriginPatterns("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
 
         registry.addMapping("/customers/**")
+                .allowedOriginPatterns("http://localhost:5173")
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
+                .allowedHeaders("*")
+                .allowCredentials(true);
+
+        registry.addMapping("/products/**")
                 .allowedOriginPatterns("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")

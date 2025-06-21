@@ -25,4 +25,17 @@ public class Productline {
     @Column(name = "image")
     private byte[] image;
 
+    public Productline(String productLine) {
+        this.productLine = productLine;
+    }
+
+    public Productline() {
+        // Default constructor
+    }
+
+    // Optionally, you can add a static factory for Jackson:
+    @com.fasterxml.jackson.annotation.JsonCreator
+    public static Productline fromString(String productLine) {
+        return new Productline(productLine);
+    }
 }
