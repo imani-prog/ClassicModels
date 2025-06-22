@@ -3,6 +3,7 @@ package com.classicmodels.classicmodels.entities;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.util.ProxyUtils;
 
@@ -11,13 +12,14 @@ import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @Embeddable
 public class PaymentId implements Serializable {
     private static final long serialVersionUID = 2745661273467188313L;
-    @Column(name = "customerNumber", nullable = false)
+    @Column(name = "customer_number", nullable = false)
     private Integer customerNumber;
 
-    @Column(name = "checkNumber", nullable = false, length = 50)
+    @Column(name = "check_number", nullable = false, length = 50)
     private String checkNumber;
 
     @Override

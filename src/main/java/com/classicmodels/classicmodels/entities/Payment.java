@@ -1,24 +1,24 @@
 package com.classicmodels.classicmodels.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Getter
-@Setter
+
 @Entity
 @Table(name = "payments")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Payment {
+
     @EmbeddedId
     private PaymentId id;
-
-    @MapsId("customerNumber")
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "customerNumber", nullable = false)
-    private Customer customerNumber;
 
     @Column(name = "paymentDate", nullable = false)
     private LocalDate paymentDate;
@@ -26,4 +26,16 @@ public class Payment {
     @Column(name = "amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal amount;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_number", insertable = false, updatable = false)
+    @JsonIgnore
+    private Customer customer;
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+        if (this.id == null) {
+            this.id = new PaymentId();
+        }
+        this.id.setCustomerNumber(customer.getCustomerNumber());
+    }
 }

@@ -52,4 +52,8 @@ public class Customer {
     @Column(name = "creditLimit", precision = 10, scale = 2)
     private BigDecimal creditLimit;
 
+    public Integer getCustomerNumber() {
+        return id;
+    }
+
 }
