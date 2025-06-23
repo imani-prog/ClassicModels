@@ -1,6 +1,6 @@
 package com.classicmodels.classicmodels.controllers;
 
-import com.classicmodels.classicmodels.entities.Employee;
+import com.classicmodels.classicmodels.dto.EmployeeDto;
 import com.classicmodels.classicmodels.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,12 +13,12 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @PostMapping("/save")
-    public Employee saveEmployee(@RequestBody Employee employee) {
-        return employeeService.saveEmployee(employee);
+    public EmployeeDto saveEmployee(@RequestBody EmployeeDto employeeDto) {
+        return employeeService.saveEmployee(employeeDto);
     }
 
     @GetMapping("/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) {
+    public EmployeeDto getEmployeeById(@PathVariable Integer id) {
         return employeeService.getEmployeeById(id);
     }
 
@@ -28,12 +28,12 @@ public class EmployeeController {
     }
 
     @PutMapping("/{id}")
-    public Employee updateEmployee(@PathVariable Integer id, @RequestBody Employee employee) {
-        return employeeService.updateEmployee(id, employee);
+    public EmployeeDto updateEmployee(@PathVariable Integer id, @RequestBody EmployeeDto employeeDto) {
+        return employeeService.updateEmployee(id, employeeDto);
     }
 
     @GetMapping
-    public List<Employee> getAllEmployees() {
+    public List<EmployeeDto> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 }
