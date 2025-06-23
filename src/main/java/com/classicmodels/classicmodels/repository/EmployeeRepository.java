@@ -1,4 +1,7 @@
 package com.classicmodels.classicmodels.repository;
 
-public interface EmployeeRepository {
+import com.classicmodels.classicmodels.entities.Employee;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 }
