@@ -1,4 +1,7 @@
 package com.classicmodels.classicmodels.repository;
 
-public interface ProductlineRepository {
+import com.classicmodels.classicmodels.entities.Productline;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ProductlineRepository extends JpaRepository<Productline, String> {
 }
