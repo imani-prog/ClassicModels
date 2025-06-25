@@ -13,4 +13,12 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Product> findByProductVendorContainingIgnoreCase(String productVendor);
     List<Product> findByProductNameContainingIgnoreCaseAndProductLine_ProductLineIgnoreCaseAndProductVendorContainingIgnoreCase(
         String productName, String productLine, String productVendor);
+
+//    @Query(value = "SELECT COUNT(*) FROM products WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1)", nativeQuery = true)
+//    long countCreatedThisWeek();
+//
+//    @Query(value = "SELECT COUNT(*) FROM products WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1) - 1", nativeQuery = true)
+//    long countCreatedLastWeek();
+//
+
 }

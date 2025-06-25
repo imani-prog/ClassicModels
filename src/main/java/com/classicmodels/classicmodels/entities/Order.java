@@ -36,4 +36,14 @@ public class Order {
     @JoinColumn(name = "customerNumber", nullable = false)
     private Customer customerNumber;
 
+//    @Column(name = "createdAt", nullable = false)
+//    private java.time.LocalDateTime createdAt;
+//
+//    @PrePersist
+//    protected void onCreate() {
+//        if (createdAt == null) {
+//            createdAt = java.time.LocalDateTime.now();
+//        }
+//    }
+
 }

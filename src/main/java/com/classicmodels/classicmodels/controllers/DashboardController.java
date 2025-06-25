@@ -1,17 +1,15 @@
 package com.classicmodels.classicmodels.controllers;
 
-import com.classicmodels.classicmodels.repository.ProductRepository;
-import com.classicmodels.classicmodels.repository.CustomerRepository;
-import com.classicmodels.classicmodels.repository.OrderRepository;
-import com.classicmodels.classicmodels.repository.EmployeeRepository;
-import com.classicmodels.classicmodels.repository.OfficeRepository;
-import com.classicmodels.classicmodels.repository.PaymentRepository;
-import com.classicmodels.classicmodels.repository.ProductlineRepository;
+import com.classicmodels.classicmodels.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -38,6 +36,7 @@ public class DashboardController {
         long productCount = productRepository.count();
         long customerCount = customerRepository.count();
         long orderCount = orderRepository.count();
+
         stats.put("products", productCount);
         stats.put("productTrend", 5);
         stats.put("customers", customerCount);

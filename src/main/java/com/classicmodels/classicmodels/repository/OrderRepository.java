@@ -11,4 +11,10 @@ public interface OrderRepository extends JpaRepository<Order, Integer> {
     List<Order> findByCustomerNumber_Id(Integer customerNumber);
 
     List<Order> findByStatusAndCustomerNumber_Id(String status, Integer customerNumber);
+
+//    @org.springframework.data.jpa.repository.Query(value = "SELECT COUNT(*) FROM orders WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1)", nativeQuery = true)
+//    long countCreatedThisWeek();
+//
+//    @org.springframework.data.jpa.repository.Query(value = "SELECT COUNT(*) FROM orders WHERE YEARWEEK(createdAt, 1) = YEARWEEK(CURDATE(), 1) - 1", nativeQuery = true)
+//    long countCreatedLastWeek();
 }

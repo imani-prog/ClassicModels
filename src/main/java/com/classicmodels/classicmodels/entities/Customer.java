@@ -52,6 +52,16 @@ public class Customer {
     @Column(name = "creditLimit", precision = 10, scale = 2)
     private BigDecimal creditLimit;
 
+//    @Column(name = "createdAt", nullable = false)
+//    private java.time.LocalDateTime createdAt;
+//
+//    @PrePersist
+//    protected void onCreate() {
+//        if (createdAt == null) {
+//            createdAt = java.time.LocalDateTime.now();
+//        }
+//    }
+
     public Integer getCustomerNumber() {
         return id;
     }
