@@ -1,5 +1,6 @@
 package com.classicmodels.classicmodels.controllers;
 
+import com.classicmodels.classicmodels.entities.Payment;
 import com.classicmodels.classicmodels.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -69,6 +70,22 @@ public class DashboardController {
     @GetMapping("/notifications")
     public List<String> getNotifications() {
         return List.of("Customer #788 deleted", "Order #102 saved", "Employee #55 updated");
+    }
+
+    @GetMapping("/top-payments")
+    public List<Map<String, Object>> getTopPayments() {
+        List<Payment> topPayments = paymentRepository.findTop10ByOrderByAmountDesc();
+        List<Map<String, Object>> results = new ArrayList<>();
+
+        for (Payment payment : topPayments) {
+            Map<String, Object> p = new HashMap<>();
+            p.put("customerNumber", payment.getCustomer() != null ? payment.getCustomer().getCustomerNumber() : null);
+            p.put("checkNumber", payment.getId().getCheckNumber());
+            p.put("amount", payment.getAmount());
+            results.add(p);
+        }
+
+        return results;
     }
 
 }
