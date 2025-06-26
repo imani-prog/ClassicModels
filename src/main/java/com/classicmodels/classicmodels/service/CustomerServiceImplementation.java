@@ -11,9 +11,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-
 public class CustomerServiceImplementation  implements CustomerService {
-
     private final CustomerRepository customerRepository;
 
     @Override
@@ -40,7 +38,11 @@ public class CustomerServiceImplementation  implements CustomerService {
     @Override
     public void deleteCustomerById(Integer id) {
         log.info("Deleting customer with ID: {}", id);
-        customerRepository.deleteById(id);
+        try {
+            customerRepository.deleteById(id);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new RuntimeException("Cannot delete customer with ID " + id + ". There are related records (e.g., payments) that prevent deletion.");
+        }
     }
 
 

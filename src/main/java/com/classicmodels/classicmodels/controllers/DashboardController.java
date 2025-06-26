@@ -1,6 +1,7 @@
 package com.classicmodels.classicmodels.controllers;
 
 import com.classicmodels.classicmodels.repository.*;
+import com.classicmodels.classicmodels.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,20 +16,15 @@ import java.util.Map;
 @RequestMapping("/api/dashboard")
 public class DashboardController {
 
-    @Autowired
-    private ProductRepository productRepository;
-    @Autowired
-    private CustomerRepository customerRepository;
-    @Autowired
-    private OrderRepository orderRepository;
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    private OfficeRepository officeRepository;
-    @Autowired
-    private PaymentRepository paymentRepository;
-    @Autowired
-    private ProductlineRepository productlineRepository;
+    @Autowired private ProductRepository productRepository;
+    @Autowired private CustomerRepository customerRepository;
+    @Autowired private OrderRepository orderRepository;
+    @Autowired private EmployeeRepository employeeRepository;
+    @Autowired private OfficeRepository officeRepository;
+    @Autowired private PaymentRepository paymentRepository;
+    @Autowired private ProductlineRepository productlineRepository;
+    @Autowired private NotificationService notificationService;
+//    @Autowired private ActivityLogService activityLogService;
 
     @GetMapping("/stats")
     public Map<String, Object> getStats() {
@@ -49,20 +45,13 @@ public class DashboardController {
     @GetMapping("/entity-distribution")
     public List<Map<String, Object>> getEntityDistribution() {
         List<Map<String, Object>> data = new ArrayList<>();
-        long productCount = productRepository.count();
-        long customerCount = customerRepository.count();
-        long orderCount = orderRepository.count();
-        long employeeCount = employeeRepository.count();
-        long officeCount = officeRepository.count();
-        long paymentCount = paymentRepository.count();
-        long productlineCount = productlineRepository.count();
-        data.add(Map.of("name", "Products", "value", productCount));
-        data.add(Map.of("name", "Customers", "value", customerCount));
-        data.add(Map.of("name", "Orders", "value", orderCount));
-        data.add(Map.of("name", "Employees", "value", employeeCount));
-        data.add(Map.of("name", "Offices", "value", officeCount));
-        data.add(Map.of("name", "Payments", "value", paymentCount));
-        data.add(Map.of("name", "Productlines", "value", productlineCount));
+        data.add(Map.of("name", "Products", "value", productRepository.count()));
+        data.add(Map.of("name", "Customers", "value", customerRepository.count()));
+        data.add(Map.of("name", "Orders", "value", orderRepository.count()));
+        data.add(Map.of("name", "Employees", "value", employeeRepository.count()));
+        data.add(Map.of("name", "Offices", "value", officeRepository.count()));
+        data.add(Map.of("name", "Payments", "value", paymentRepository.count()));
+        data.add(Map.of("name", "Productlines", "value", productlineRepository.count()));
         return data;
     }
 
@@ -81,11 +70,21 @@ public class DashboardController {
 
     @GetMapping("/notifications")
     public List<String> getNotifications() {
-        return List.of(
-            "New order received from customer #123.",
-            "Product stock for 'Classic Car' is low.",
-            "Customer Jane Doe registered.",
-            "Order #456 has been shipped."
-        );
+        return notificationService.getAllNotifications().stream()
+                .map(n -> n.getMessage())
+                .toList();
     }
+
+//    @GetMapping("/activity")
+//    public List<Map<String, Object>> getRecentActivity() {
+//        return activityLogService.getRecentLogs().stream().map(log -> {
+//            Map<String, Object> entry = new HashMap<>();
+//            entry.put("entityType", log.getEntityType());
+//            entry.put("action", log.getAction());
+//            entry.put("description", log.getDescription());
+//            entry.put("timestamp", log.getTimestamp());
+//            entry.put("performedBy", log.getPerformedBy());
+//            return entry;
+//        }).toList();
+//    }
 }

@@ -32,11 +32,15 @@ CustomerController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteCustomer(@PathVariable Integer id) {
         Customer customer = customerService.getCustomerById(id);
         if (customer != null) {
-            customerService.deleteCustomerById(id);
-            return ResponseEntity.noContent().build();
+            try {
+                customerService.deleteCustomerById(id);
+                return ResponseEntity.noContent().build();
+            } catch (RuntimeException e) {
+                return ResponseEntity.badRequest().body(e.getMessage());
+            }
         } else {
             return ResponseEntity.notFound().build();
         }
