@@ -1,7 +1,6 @@
 package com.classicmodels.classicmodels.controllers;
 
 import com.classicmodels.classicmodels.repository.*;
-import com.classicmodels.classicmodels.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +22,7 @@ public class DashboardController {
     @Autowired private OfficeRepository officeRepository;
     @Autowired private PaymentRepository paymentRepository;
     @Autowired private ProductlineRepository productlineRepository;
-    @Autowired private NotificationService notificationService;
-//    @Autowired private ActivityLogService activityLogService;
+
 
     @GetMapping("/stats")
     public Map<String, Object> getStats() {
@@ -70,21 +68,7 @@ public class DashboardController {
 
     @GetMapping("/notifications")
     public List<String> getNotifications() {
-        return notificationService.getAllNotifications().stream()
-                .map(n -> n.getMessage())
-                .toList();
+        return List.of("Customer #788 deleted", "Order #102 saved", "Employee #55 updated");
     }
 
-//    @GetMapping("/activity")
-//    public List<Map<String, Object>> getRecentActivity() {
-//        return activityLogService.getRecentLogs().stream().map(log -> {
-//            Map<String, Object> entry = new HashMap<>();
-//            entry.put("entityType", log.getEntityType());
-//            entry.put("action", log.getAction());
-//            entry.put("description", log.getDescription());
-//            entry.put("timestamp", log.getTimestamp());
-//            entry.put("performedBy", log.getPerformedBy());
-//            return entry;
-//        }).toList();
-//    }
 }
