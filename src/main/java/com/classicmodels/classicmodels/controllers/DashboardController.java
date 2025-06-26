@@ -88,4 +88,18 @@ public class DashboardController {
         return results;
     }
 
+    @GetMapping("/revenue-summary")
+    public Map<String, Object> getRevenueSummary() {
+        double totalRevenue = paymentRepository.findAll()
+                .stream()
+                .mapToDouble(p -> p.getAmount().doubleValue())
+                .sum();
+
+        Map<String, Object> summary = new HashMap<>();
+        summary.put("totalRevenue", totalRevenue);
+        summary.put("trend", 8); // You can calculate this properly if you track per-month revenue
+        return summary;
+    }
+
+
 }
