@@ -1,16 +1,17 @@
 package com.classicmodels.classicmodels.controllers;
 
+import com.classicmodels.classicmodels.dto.OrderStatusTrendDTO;
 import com.classicmodels.classicmodels.entities.Payment;
 import com.classicmodels.classicmodels.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
@@ -100,6 +101,47 @@ public class DashboardController {
         summary.put("trend", 8); // You can calculate this properly if you track per-month revenue
         return summary;
     }
+
+    @GetMapping("/top-products")
+    public List<Map<String, Object>> getTopProducts() {
+        Pageable topFive = PageRequest.of(0, 5);
+        return productRepository.findTop5ByBuyPriceDesc(topFive);
+    }
+    @GetMapping("/order-status-trend")
+    public List<Map<String, Object>> getOrderStatusTrend() {
+        List<OrderStatusTrendDTO> rawData = orderRepository.getOrderStatusTrends();
+
+        // Use a sorted map to keep dates in order
+        Map<LocalDate, Map<String, Object>> trendMap = new TreeMap<>();
+
+        for (OrderStatusTrendDTO dto : rawData) {
+            LocalDate date = dto.getOrderDate();
+            String status = dto.getStatus().toLowerCase();
+            Long count = dto.getCount();
+
+            // Initialize map for date if it doesn't exist
+            trendMap.putIfAbsent(date, new LinkedHashMap<>());
+            Map<String, Object> dailyData = trendMap.get(date);
+
+            // Always set the date key
+            dailyData.put("date", date.toString());
+
+            // Set the specific status count
+            dailyData.put(status, count);
+        }
+
+        // Normalize data to include all statuses with 0 if missing
+        for (Map<String, Object> dayData : trendMap.values()) {
+            dayData.putIfAbsent("shipped", 0L);
+            dayData.putIfAbsent("completed", 0L);
+            dayData.putIfAbsent("pending", 0L);
+        }
+
+        return new ArrayList<>(trendMap.values());
+    }
+
+
+
 
 
 }
