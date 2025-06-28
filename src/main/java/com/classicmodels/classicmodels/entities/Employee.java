@@ -9,10 +9,11 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "employees")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
     @Id
     @Column(name = "employeeNumber", nullable = false)
-    private Integer id;
+    private Integer employeeNumber;
 
     @Column(name = "lastName", nullable = false, length = 50)
     private String lastName;
@@ -28,12 +29,10 @@ public class Employee {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "officeCode", nullable = false)
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Office officeCode;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "reportsTo")
-    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private Employee reportsTo;
 
     @Column(name = "jobTitle", nullable = false, length = 50)

@@ -22,13 +22,13 @@ public class EmployeeServiceImplementation implements EmployeeService {
     private EmployeeDto toDto(Employee employee) {
         if (employee == null) return null;
         EmployeeDto dto = new EmployeeDto();
-        dto.setId(employee.getId());
+        dto.setId(employee.getEmployeeNumber());
         dto.setLastName(employee.getLastName());
         dto.setFirstName(employee.getFirstName());
         dto.setExtension(employee.getExtension());
         dto.setEmail(employee.getEmail());
         dto.setOfficeCode(employee.getOfficeCode() != null ? employee.getOfficeCode().getOfficeCode() : null);
-        dto.setReportsTo(employee.getReportsTo() != null ? employee.getReportsTo().getId() : null);
+        dto.setReportsTo(employee.getReportsTo() != null ? employee.getReportsTo().getEmployeeNumber() : null);
         dto.setJobTitle(employee.getJobTitle());
         return dto;
     }
@@ -36,7 +36,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
     private Employee toEntity(EmployeeDto dto) {
         if (dto == null) return null;
         Employee employee = new Employee();
-        employee.setId(dto.getId());
+        employee.setEmployeeNumber(dto.getId());
         employee.setLastName(dto.getLastName());
         employee.setFirstName(dto.getFirstName());
         employee.setExtension(dto.getExtension());
@@ -75,7 +75,7 @@ public class EmployeeServiceImplementation implements EmployeeService {
     public EmployeeDto updateEmployee(Integer id, EmployeeDto employeeDto) {
         if (employeeRepository.existsById(id)) {
             Employee employee = toEntity(employeeDto);
-            employee.setId(id);
+            employee.setEmployeeNumber(id);
             Employee updated = employeeRepository.save(employee);
             return toDto(updated);
         }

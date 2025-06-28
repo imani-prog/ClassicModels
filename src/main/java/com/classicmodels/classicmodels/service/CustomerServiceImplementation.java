@@ -1,10 +1,13 @@
 package com.classicmodels.classicmodels.service;
 
 import com.classicmodels.classicmodels.entities.Customer;
+import com.classicmodels.classicmodels.entities.Employee;
 import com.classicmodels.classicmodels.repository.CustomerRepository;
+import com.classicmodels.classicmodels.repository.EmployeeRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -13,11 +16,24 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CustomerServiceImplementation  implements CustomerService {
     private final CustomerRepository customerRepository;
+    private final EmployeeRepository employeeRepository;
 
     @Override
     public Customer saveCustomer(Customer customer) {
         if (customer.getId() == null) {
             customer.setId(generateCustomerNumber());
+        }
+        // Debug: print Employee before and after fetch
+        if (customer.getSalesRepEmployeeNumber() != null) {
+            System.out.println("[DEBUG] Incoming Employee: " + customer.getSalesRepEmployeeNumber());
+            System.out.println("[DEBUG] Incoming Employee Number: " + customer.getSalesRepEmployeeNumber().getEmployeeNumber());
+        }
+        // Ensure salesRepEmployeeNumber is a managed entity
+        if (customer.getSalesRepEmployeeNumber() != null && customer.getSalesRepEmployeeNumber().getEmployeeNumber() != null) {
+            Employee managedEmployee = employeeRepository.findById(customer.getSalesRepEmployeeNumber().getEmployeeNumber())
+                    .orElseThrow(() -> new IllegalArgumentException("Employee with number " + customer.getSalesRepEmployeeNumber().getEmployeeNumber() + " not found"));
+            System.out.println("[DEBUG] Managed Employee: " + managedEmployee);
+            customer.setSalesRepEmployeeNumber(managedEmployee);
         }
         return customerRepository.save(customer);
 
@@ -73,6 +89,31 @@ public class CustomerServiceImplementation  implements CustomerService {
         return customerRepository.findAll();
     }
 
+    @Override
+    @Transactional
+    public List<Customer> saveCustomers(List<Customer> customers) {
+        int uniqueSeed = (int) (System.currentTimeMillis() % 1000000);
+        int counter = 0;
+        for (Customer customer : customers) {
+            // Assign a unique customer number if missing
+            if (customer.getId() == null) {
+                customer.setId(uniqueSeed + counter);
+                counter++;
+            }
+            // Always resolve salesRepEmployeeNumber to a managed Employee entity if present
+            if (customer.getSalesRepEmployeeNumber() != null) {
+                Integer empNo = customer.getSalesRepEmployeeNumber().getEmployeeNumber();
+                if (empNo != null) {
+                    Employee managedEmployee = employeeRepository.findById(empNo)
+                        .orElseThrow(() -> new RuntimeException("Employee not found: " + empNo));
+                    customer.setSalesRepEmployeeNumber(managedEmployee);
+                } else {
+                    customer.setSalesRepEmployeeNumber(null);
+                }
+            }
+        }
+        return customerRepository.saveAll(customers);
+    }
 
 
 }

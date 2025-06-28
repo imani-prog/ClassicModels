@@ -19,7 +19,19 @@ CustomerController {
     @PostMapping("/save")
     public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer){
         Customer savedCustomer = customerService.saveCustomer(customer);
-        return ResponseEntity.ok(new Customer());
+        return ResponseEntity.ok(savedCustomer);
+    }
+
+//    @PostMapping("/save")
+//    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer){
+//        Customer savedCustomer = customerService.saveCustomer(customer);
+//        return ResponseEntity.ok(new Customer());
+//    }
+
+    @PostMapping("/saveBatch")
+    public ResponseEntity<List<Customer>> saveCustomers(@RequestBody List<Customer> customers) {
+        List<Customer> savedCustomers = customerService.saveCustomers(customers);
+        return ResponseEntity.ok(savedCustomers);
     }
     @GetMapping("/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable Integer id) {

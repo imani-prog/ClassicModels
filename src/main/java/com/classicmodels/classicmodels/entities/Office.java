@@ -1,5 +1,6 @@
 package com.classicmodels.classicmodels.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -12,6 +13,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table(name = "offices")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Office {
     @Id
     @Column(name = "officeCode", nullable = false, length = 10)

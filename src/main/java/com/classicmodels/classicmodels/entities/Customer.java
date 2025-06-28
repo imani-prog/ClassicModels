@@ -1,5 +1,6 @@
 package com.classicmodels.classicmodels.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,6 +11,7 @@ import java.math.BigDecimal;
 @Setter
 @Entity
 @Table(name = "customers")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Customer {
     @Id
     @Column(name = "customerNumber", nullable = false)
@@ -47,6 +49,7 @@ public class Customer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salesRepEmployeeNumber")
+    // Ensure no cascade to avoid persisting transient Employee
     private Employee salesRepEmployeeNumber;
 
     @Column(name = "creditLimit", precision = 10, scale = 2)
