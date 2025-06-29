@@ -12,6 +12,7 @@ import lombok.Setter;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employeeNumber", nullable = false)
     private Integer employeeNumber;
 
@@ -37,5 +38,11 @@ public class Employee {
 
     @Column(name = "jobTitle", nullable = false, length = 50)
     private String jobTitle;
+
+    public Employee() {}
+
+    public Employee(Integer employeeNumber) {
+        this.employeeNumber = employeeNumber;
+    }
 
 }

@@ -55,6 +55,12 @@ public class EmployeeServiceImplementation implements EmployeeService {
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
+        // Auto-generate extension if not provided
+        if (employeeDto.getExtension() == null || employeeDto.getExtension().isEmpty()) {
+            Integer maxExt = employeeRepository.findMaxExtensionNumber();
+            int nextExt = (maxExt != null ? maxExt + 1 : 1001);
+            employeeDto.setExtension("x" + nextExt);
+        }
         Employee employee = toEntity(employeeDto);
         Employee saved = employeeRepository.save(employee);
         return toDto(saved);
@@ -74,6 +80,12 @@ public class EmployeeServiceImplementation implements EmployeeService {
     @Override
     public EmployeeDto updateEmployee(Integer id, EmployeeDto employeeDto) {
         if (employeeRepository.existsById(id)) {
+            // Auto-generate extension if not provided
+            if (employeeDto.getExtension() == null || employeeDto.getExtension().isEmpty()) {
+                Integer maxExt = employeeRepository.findMaxExtensionNumber();
+                int nextExt = (maxExt != null ? maxExt + 1 : 1001);
+                employeeDto.setExtension("x" + nextExt);
+            }
             Employee employee = toEntity(employeeDto);
             employee.setEmployeeNumber(id);
             Employee updated = employeeRepository.save(employee);
