@@ -18,15 +18,34 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public Product saveProduct(Product product) {
-        if (product.getProductCode() == null) {
+        if (product.getProductCode() == null || product.getProductCode().isEmpty()) {
             product.setProductCode(generateProductCode());
         }
         return productRepository.save(product);
     }
-    private String generateProductCode(){
-        String productCode = "P" + (System.currentTimeMillis() % 1000000);
-        log.info("\nGenerated product code: {}", productCode);
-        return productCode;
+
+    private String generateProductCode() {
+        try {
+            long productCount = productRepository.count();
+
+            int nextNumber = (int) (productCount + 1);
+
+            String productCode = String.format("PROD-%03d", nextNumber);
+
+            while (productRepository.existsById(productCode)) {
+                nextNumber++;
+                productCode = String.format("PROD-%03d", nextNumber);
+            }
+
+            log.info("Generated product code: {}", productCode);
+            return productCode;
+
+        } catch (Exception e) {
+            // Fallback to timestamp-based generation if there's an error
+            String fallbackCode = "PROD-" + (System.currentTimeMillis() % 100000);
+            log.warn("Error generating sequential product code, using fallback: {}", fallbackCode);
+            return fallbackCode;
+        }
     }
 
     @Override

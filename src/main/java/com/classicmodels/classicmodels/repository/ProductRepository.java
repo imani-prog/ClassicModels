@@ -29,3 +29,4 @@ public interface ProductRepository extends JpaRepository<Product, String> {
     List<Map<String, Object>> findTop5ByBuyPriceDesc(Pageable pageable);
 
 }
+
