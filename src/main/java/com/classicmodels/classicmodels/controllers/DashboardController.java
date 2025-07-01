@@ -55,18 +55,18 @@ public class DashboardController {
         return data;
     }
 
-    @GetMapping("/order-trend")
-    public List<Map<String, Object>> getOrderTrend() {
-        List<Map<String, Object>> data = new ArrayList<>();
-        data.add(Map.of("day", "Mon", "orders", 15));
-        data.add(Map.of("day", "Tue", "orders", 18));
-        data.add(Map.of("day", "Wed", "orders", 20));
-        data.add(Map.of("day", "Thu", "orders", 22));
-        data.add(Map.of("day", "Fri", "orders", 25));
-        data.add(Map.of("day", "Sat", "orders", 10));
-        data.add(Map.of("day", "Sun", "orders", 10));
-        return data;
-    }
+//    @GetMapping("/order-trend")
+//    public List<Map<String, Object>> getOrderTrend() {
+//        List<Map<String, Object>> data = new ArrayList<>();
+//        data.add(Map.of("day", "Mon", "orders", 15));
+//        data.add(Map.of("day", "Tue", "orders", 18));
+//        data.add(Map.of("day", "Wed", "orders", 20));
+//        data.add(Map.of("day", "Thu", "orders", 22));
+//        data.add(Map.of("day", "Fri", "orders", 25));
+//        data.add(Map.of("day", "Sat", "orders", 10));
+//        data.add(Map.of("day", "Sun", "orders", 10));
+//        return data;
+//    }
 
     @GetMapping("/notifications")
     public List<String> getNotifications() {
