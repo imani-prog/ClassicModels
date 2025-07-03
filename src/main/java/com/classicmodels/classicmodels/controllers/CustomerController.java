@@ -3,20 +3,20 @@ package com.classicmodels.classicmodels.controllers;
 
 import com.classicmodels.classicmodels.entities.Customer;
 import com.classicmodels.classicmodels.service.CustomerService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/customers")
-@RequiredArgsConstructor
 public class
 CustomerController {
     private final CustomerService customerService;
 
-    @PostMapping("/save")
+    public CustomerController(CustomerService customerService) {
+        this.customerService = customerService;
+    }
+
     public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer){
         Customer savedCustomer = customerService.saveCustomer(customer);
         return ResponseEntity.ok(savedCustomer);
