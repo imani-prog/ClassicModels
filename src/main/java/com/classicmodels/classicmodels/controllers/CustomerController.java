@@ -18,16 +18,13 @@ CustomerController {
         this.customerService = customerService;
     }
 
+
+
+    @PostMapping("/save")
     public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer){
         Customer savedCustomer = customerService.saveCustomer(customer);
-        return ResponseEntity.ok(savedCustomer);
+        return ResponseEntity.ok(new Customer());
     }
-
-//    @PostMapping("/save")
-//    public ResponseEntity<Customer> saveCustomer(@RequestBody Customer customer){
-//        Customer savedCustomer = customerService.saveCustomer(customer);
-//        return ResponseEntity.ok(new Customer());
-//    }
 
     @PostMapping("/saveBatch")
     public ResponseEntity<List<Customer>> saveCustomers(@RequestBody List<Customer> customers) {

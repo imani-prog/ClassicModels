@@ -3,9 +3,11 @@ package com.classicmodels.classicmodels.controllers;
 import com.classicmodels.classicmodels.dto.OrderStatusTrendDTO;
 import com.classicmodels.classicmodels.entities.Payment;
 import com.classicmodels.classicmodels.repository.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +17,7 @@ import java.util.*;
 
 @RestController
 @RequestMapping("/api/dashboard")
+@Slf4j
 public class DashboardController {
 
     @Autowired private ProductRepository productRepository;
@@ -28,45 +31,70 @@ public class DashboardController {
 
     @GetMapping("/stats")
     public Map<String, Object> getStats() {
+        log.info("Dashboard stats request received");
         Map<String, Object> stats = new HashMap<>();
-        long productCount = productRepository.count();
-        long customerCount = customerRepository.count();
-        long orderCount = orderRepository.count();
 
-        stats.put("products", productCount);
-        stats.put("productTrend", 5);
-        stats.put("customers", customerCount);
-        stats.put("customerTrend", -2);
-        stats.put("orders", orderCount);
-        stats.put("orderTrend", 3);
-        return stats;
+        try {
+            long productCount = productRepository.count();
+            long customerCount = customerRepository.count();
+            long orderCount = orderRepository.count();
+
+            log.info("Raw counts - Products: {}, Customers: {}, Orders: {}", productCount, customerCount, orderCount);
+
+            stats.put("products", productCount);
+            stats.put("productTrend", 5);
+            stats.put("customers", customerCount);
+            stats.put("customerTrend", -2);
+            stats.put("orders", orderCount);
+            stats.put("orderTrend", 3);
+
+            log.info("Stats response: {}", stats);
+            return stats;
+        } catch (Exception e) {
+            log.error("Error fetching stats: {}", e.getMessage());
+            // Return default values if there's an error
+            stats.put("products", 0);
+            stats.put("productTrend", 0);
+            stats.put("customers", 0);
+            stats.put("customerTrend", 0);
+            stats.put("orders", 0);
+            stats.put("orderTrend", 0);
+            return stats;
+        }
     }
 
     @GetMapping("/entity-distribution")
     public List<Map<String, Object>> getEntityDistribution() {
+        log.info("Entity distribution request received");
         List<Map<String, Object>> data = new ArrayList<>();
-        data.add(Map.of("name", "Products", "value", productRepository.count()));
-        data.add(Map.of("name", "Customers", "value", customerRepository.count()));
-        data.add(Map.of("name", "Orders", "value", orderRepository.count()));
-        data.add(Map.of("name", "Employees", "value", employeeRepository.count()));
-        data.add(Map.of("name", "Offices", "value", officeRepository.count()));
-        data.add(Map.of("name", "Payments", "value", paymentRepository.count()));
-        data.add(Map.of("name", "Productlines", "value", productlineRepository.count()));
-        return data;
-    }
 
-//    @GetMapping("/order-trend")
-//    public List<Map<String, Object>> getOrderTrend() {
-//        List<Map<String, Object>> data = new ArrayList<>();
-//        data.add(Map.of("day", "Mon", "orders", 15));
-//        data.add(Map.of("day", "Tue", "orders", 18));
-//        data.add(Map.of("day", "Wed", "orders", 20));
-//        data.add(Map.of("day", "Thu", "orders", 22));
-//        data.add(Map.of("day", "Fri", "orders", 25));
-//        data.add(Map.of("day", "Sat", "orders", 10));
-//        data.add(Map.of("day", "Sun", "orders", 10));
-//        return data;
-//    }
+        try {
+            long productCount = productRepository.count();
+            long customerCount = customerRepository.count();
+            long orderCount = orderRepository.count();
+            long employeeCount = employeeRepository.count();
+            long officeCount = officeRepository.count();
+            long paymentCount = paymentRepository.count();
+            long productlineCount = productlineRepository.count();
+
+            log.info("Entity counts - Products: {}, Customers: {}, Orders: {}, Employees: {}, Offices: {}, Payments: {}, Productlines: {}",
+                    productCount, customerCount, orderCount, employeeCount, officeCount, paymentCount, productlineCount);
+
+            data.add(Map.of("name", "Products", "value", productCount));
+            data.add(Map.of("name", "Customers", "value", customerCount));
+            data.add(Map.of("name", "Orders", "value", orderCount));
+            data.add(Map.of("name", "Employees", "value", employeeCount));
+            data.add(Map.of("name", "Offices", "value", officeCount));
+            data.add(Map.of("name", "Payments", "value", paymentCount));
+            data.add(Map.of("name", "Productlines", "value", productlineCount));
+
+            log.info("Entity distribution response: {}", data);
+            return data;
+        } catch (Exception e) {
+            log.error("Error fetching entity distribution: {}", e.getMessage());
+            return new ArrayList<>();
+        }
+    }
 
     @GetMapping("/notifications")
     public List<String> getNotifications() {
@@ -140,8 +168,24 @@ public class DashboardController {
         return new ArrayList<>(trendMap.values());
     }
 
+    // Test endpoint to check if dashboard is accessible
+    @GetMapping("/test")
+    public ResponseEntity<?> testDashboard() {
+        Map<String, Object> response = new HashMap<>();
+        response.put("message", "Dashboard endpoint is working");
+        response.put("timestamp", System.currentTimeMillis());
+        response.put("server", "Spring Boot Backend");
 
+        // Test database connectivity
+        try {
+            long productCount = productRepository.count();
+            response.put("databaseConnected", true);
+            response.put("sampleProductCount", productCount);
+        } catch (Exception e) {
+            response.put("databaseConnected", false);
+            response.put("databaseError", e.getMessage());
+        }
 
-
-
+        return ResponseEntity.ok(response);
+    }
 }
