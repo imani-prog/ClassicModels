@@ -7,6 +7,8 @@ import java.util.List;
 public interface ProductService {
     Product saveProduct(Product product);
 
+    List<Product> saveProducts(List<Product> products);
+
     Product getProductById(String id);
 
     List<Product> searchProducts(String productName, String productLine, String productVendor);

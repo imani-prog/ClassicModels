@@ -11,7 +11,6 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-// This class is a placeholder for the CustomerService implementation.
 public class ProductServiceImplementation implements ProductService {
 
     private final ProductRepository productRepository;
@@ -22,6 +21,21 @@ public class ProductServiceImplementation implements ProductService {
             product.setProductCode(generateProductCode());
         }
         return productRepository.save(product);
+    }
+
+    @Override
+    public List<Product> saveProducts(List<Product> products) {
+        // Generate product codes for products that don't have them
+        long currentProductCount = productRepository.count();
+        int codeCounter = 1;
+
+        for (Product product : products) {
+            if (product.getProductCode() == null || product.getProductCode().isEmpty()) {
+                product.setProductCode(generateUniqueProductCode(currentProductCount + codeCounter));
+                codeCounter++;
+            }
+        }
+        return productRepository.saveAll(products);
     }
 
     private String generateProductCode() {
@@ -44,6 +58,26 @@ public class ProductServiceImplementation implements ProductService {
             // Fallback to timestamp-based generation if there's an error
             String fallbackCode = "PROD-" + (System.currentTimeMillis() % 100000);
             log.warn("Error generating sequential product code, using fallback: {}", fallbackCode);
+            return fallbackCode;
+        }
+    }
+
+    private String generateUniqueProductCode(long baseNumber) {
+        try {
+            String productCode = String.format("PROD-%03d", (int) baseNumber);
+
+            // Check if code already exists and increment if needed
+            while (productRepository.existsById(productCode)) {
+                baseNumber++;
+                productCode = String.format("PROD-%03d", (int) baseNumber);
+            }
+
+            log.info("Generated unique product code: {}", productCode);
+            return productCode;
+        } catch (Exception e) {
+            // Fallback to timestamp-based generation if there's an error
+            String fallbackCode = "PROD-" + (System.currentTimeMillis() % 100000);
+            log.warn("Error generating unique product code, using fallback: {}", fallbackCode);
             return fallbackCode;
         }
     }

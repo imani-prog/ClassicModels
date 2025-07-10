@@ -7,9 +7,9 @@ import java.util.Optional;
 public interface OrderService {
     Order saveOrder(Order order);
     Order createOrder(Order order);
-    Optional<Order> getOrderById(Integer id);
+    Optional<Order> getOrderById(String id);
     List<Order> searchOrders(String status, Integer customerNumber);
     List<Order> getAllOrders();
-    Order updateOrder(Integer id, Order order);
-    boolean deleteOrder(Integer id);
+    Order updateOrder(String id, Order order);
+    boolean deleteOrder(String id);
 }

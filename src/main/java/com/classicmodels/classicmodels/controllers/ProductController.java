@@ -3,6 +3,7 @@ package com.classicmodels.classicmodels.controllers;
 import com.classicmodels.classicmodels.entities.Product;
 import com.classicmodels.classicmodels.service.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,8 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
-
-
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;
@@ -21,6 +21,26 @@ public class ProductController {
     public ResponseEntity<Product> saveProduct(@RequestBody Product product) {
         Product savedProduct = productService.saveProduct(product);
         return ResponseEntity.ok(savedProduct);
+    }
+
+    @PostMapping("/saveBatch")
+    public ResponseEntity<List<Product>> saveProducts(@RequestBody List<Product> products) {
+        log.info("Received {} products for batch save", products.size());
+
+        // Log details of each product for debugging
+        for (int i = 0; i < products.size(); i++) {
+            Product product = products.get(i);
+            log.info("Product {}: code={}, name={}, quantityInStock={}, productLine={}",
+                i + 1,
+                product.getProductCode(),
+                product.getProductName(),
+                product.getQuantityInStock(),
+                product.getProductLine() != null ? product.getProductLine().getProductLine() : "null"
+            );
+        }
+
+        List<Product> savedProducts = productService.saveProducts(products);
+        return ResponseEntity.ok(savedProducts);
     }
 
     @PostMapping

@@ -14,16 +14,50 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public Order saveOrder(Order order) {
+        if (order.getId() == null || order.getId().isEmpty()) {
+            order.setId(generateOrderId());
+        }
         return orderRepository.save(order);
     }
 
     @Override
     public Order createOrder(Order order) {
+        if (order.getId() == null || order.getId().isEmpty()) {
+            order.setId(generateOrderId());
+        }
         return orderRepository.save(order);
     }
 
+    private String generateOrderId() {
+        try {
+            // Get current year
+            int currentYear = java.time.LocalDate.now().getYear();
+
+            // Count orders for current year
+            String yearPrefix = "ORD-" + currentYear + "-";
+            long countForYear = orderRepository.countByIdStartingWith(yearPrefix);
+
+            // Generate sequential number (starting from 1)
+            int nextNumber = (int) (countForYear + 1);
+
+            // Format: ORD-2025-001, ORD-2025-002, etc.
+            String orderId = String.format("ORD-%d-%03d", currentYear, nextNumber);
+
+            // Check if this ID already exists and increment if needed
+            while (orderRepository.existsById(orderId)) {
+                nextNumber++;
+                orderId = String.format("ORD-%d-%03d", currentYear, nextNumber);
+            }
+
+            return orderId;
+        } catch (Exception e) {
+            // Fallback to timestamp-based ID if there's an error
+            return "ORD-" + System.currentTimeMillis();
+        }
+    }
+
     @Override
-    public Optional<Order> getOrderById(Integer id) {
+    public Optional<Order> getOrderById(String id) {
         return orderRepository.findById(id);
     }
 
@@ -46,7 +80,7 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public Order updateOrder(Integer id, Order order) {
+    public Order updateOrder(String id, Order order) {
         if (!orderRepository.existsById(id)) {
             return null;
         }
@@ -55,7 +89,7 @@ public class OrderServiceImplementation implements OrderService {
     }
 
     @Override
-    public boolean deleteOrder(Integer id) {
+    public boolean deleteOrder(String id) {
         if (!orderRepository.existsById(id)) {
             return false;
         }

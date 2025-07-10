@@ -33,7 +33,6 @@ public class OrderController {
         Customer customer = customerRepository.findById(orderDto.customerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + orderDto.customerNumber));
         Order order = new Order();
-        order.setId(orderDto.id);
         order.setOrderDate(orderDto.orderDate);
         order.setRequiredDate(orderDto.requiredDate);
         order.setShippedDate(orderDto.shippedDate);
@@ -45,7 +44,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable Integer id) {
+    public ResponseEntity<OrderResponseDto> getOrderById(@PathVariable String id) {
         return orderService.getOrderById(id)
                 .map(order -> {
                     Customer customer = order.getCustomerNumber();
@@ -104,7 +103,7 @@ public class OrderController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OrderResponseDto> updateOrder(@PathVariable Integer id, @RequestBody OrderDto orderDto) {
+    public ResponseEntity<OrderResponseDto> updateOrder(@PathVariable String id, @RequestBody OrderDto orderDto) {
         Customer customer = customerRepository.findById(orderDto.customerNumber)
                 .orElseThrow(() -> new IllegalArgumentException("Customer not found: " + orderDto.customerNumber));
         Order order = new Order();
@@ -134,7 +133,7 @@ public class OrderController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteOrder(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteOrder(@PathVariable String id) {
         boolean deleted = orderService.deleteOrder(id);
         if (deleted) {
             return ResponseEntity.noContent().build();

@@ -1,0 +1,16 @@
+[
+  {
+    "productCode": "TEST001",
+    "productName": "Test Product",
+    "productLine": {
+      "productLine": "Classic Cars"
+    },
+    "productScale": "1:18",
+    "productVendor": "Test Vendor",
+    "productDescription": "Test Description",
+    "quantityInStock": 100,
+    "buyPrice": 50.00,
+    "msrp": 100.00
+  }
+]
+

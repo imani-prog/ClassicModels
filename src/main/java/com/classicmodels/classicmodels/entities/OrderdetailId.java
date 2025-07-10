@@ -14,8 +14,8 @@ import java.util.Objects;
 @Embeddable
 public class OrderdetailId implements Serializable {
     private static final long serialVersionUID = 4708156443048968190L;
-    @Column(name = "orderNumber", nullable = false)
-    private Integer orderNumber;
+    @Column(name = "orderNumber", nullable = false, length = 20)
+    private String orderNumber;
 
     @Column(name = "productCode", nullable = false, length = 15)
     private String productCode;

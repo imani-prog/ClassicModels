@@ -12,9 +12,8 @@ import java.time.LocalDate;
 @Table(name = "orders")
 public class Order {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "orderNumber", nullable = false)
-    private Integer id;
+    @Column(name = "orderNumber", nullable = false, length = 20)
+    private String id;
 
     @Column(name = "orderDate", nullable = false)
     private LocalDate orderDate;

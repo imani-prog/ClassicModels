@@ -7,12 +7,15 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface OrderRepository extends JpaRepository<Order, Integer> {
+public interface OrderRepository extends JpaRepository<Order, String> {
     List<Order> findByStatus(String status);
 
     List<Order> findByCustomerNumber_Id(Integer customerNumber);
 
     List<Order> findByStatusAndCustomerNumber_Id(String status, Integer customerNumber);
+
+    // Add method to count orders by ID prefix for generating sequential IDs
+    long countByIdStartingWith(String prefix);
 
     @Query("SELECT o.status AS status, o.orderDate AS orderDate, COUNT(o) AS count " +
             "FROM Order o GROUP BY o.status, o.orderDate ORDER BY o.orderDate ASC")

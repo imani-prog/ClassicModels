@@ -3,7 +3,7 @@ package com.classicmodels.classicmodels.dto;
 import java.time.LocalDate;
 
 public class OrderResponseDto {
-    public Integer id;
+    public String id;
     public LocalDate orderDate;
     public LocalDate requiredDate;
     public LocalDate shippedDate;
@@ -12,7 +12,7 @@ public class OrderResponseDto {
     public Integer customerNumber;
     public String customerName;
 
-    public OrderResponseDto(Integer id, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, Integer customerNumber, String customerName) {
+    public OrderResponseDto(String id, LocalDate orderDate, LocalDate requiredDate, LocalDate shippedDate, String status, String comments, Integer customerNumber, String customerName) {
         this.id = id;
         this.orderDate = orderDate;
         this.requiredDate = requiredDate;
@@ -23,4 +23,3 @@ public class OrderResponseDto {
         this.customerName = customerName;
     }
 }
-
