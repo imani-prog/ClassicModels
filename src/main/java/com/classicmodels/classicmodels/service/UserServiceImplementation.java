@@ -33,20 +33,15 @@ public class UserServiceImplementation implements UserService {
 
     @Override
     public UserDto registerUser(RegistrationDto registrationDto) {
-        // Check if passwords match
         if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             throw new RuntimeException("Passwords do not match");
         }
 
-        // Check if user already exists
         if (existsByEmail(registrationDto.getEmail())) {
             throw new RuntimeException("User with this email already exists");
         }
-
-        // Create new user
         User user = convertToEntity(registrationDto);
 
-        // Generate custom ID based on role
         String customId = userIdGenerator.generateUserId(user.getRole());
         user.setId(customId);
 

@@ -17,7 +17,7 @@ public class WebConfig implements WebMvcConfigurer {
     public void addCorsMappings(CorsRegistry registry) {
         log.info("CorsMapping enabled");
 
-        // Add explicit mapping for auth endpoints
+        // mapping for auth endpoint
         registry.addMapping("/api/auth/**")
                 .allowedOriginPatterns("http://localhost:5173")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")

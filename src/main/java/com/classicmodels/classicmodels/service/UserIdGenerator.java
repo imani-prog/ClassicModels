@@ -14,17 +14,14 @@ public class UserIdGenerator {
     public String generateUserId(User.Role role) {
         String prefix = getPrefix(role);
 
-        // Find the highest existing ID for this role
         String lastId = userRepository.findLastIdByRole(role);
 
         int nextNumber = 1;
         if (lastId != null && !lastId.isEmpty()) {
-            // Extract the number part from the last ID (e.g., "AD001" -> "001")
             String numberPart = lastId.substring(prefix.length());
             nextNumber = Integer.parseInt(numberPart) + 1;
         }
 
-        // Format with leading zeros (e.g., 1 -> "001")
         return prefix + String.format("%03d", nextNumber);
     }
 
@@ -35,7 +32,7 @@ public class UserIdGenerator {
             case USER:
                 return "US";
             default:
-                return "UN"; // Unknown
+                return "UN";
         }
     }
 }

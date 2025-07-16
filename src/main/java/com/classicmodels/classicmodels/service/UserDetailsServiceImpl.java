@@ -28,9 +28,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             user.getEmail(),
             user.getPassword(),
             user.isEnabled(),
-            true, // account non expired
-            true, // credentials non expired
-            true, // account non locked
+            true,
+            true,
+            true,
             getAuthorities(user)
         );
     }

@@ -68,7 +68,7 @@ public class AuthController {
         }
     }
 
-    // Test endpoint to verify user data and permissions
+    // Testing endpoint to verify user data and permissions
     @GetMapping("/verify-role")
     public ResponseEntity<?> verifyUserRole(@RequestParam String email) {
         log.info("Role verification request for email: {}", email);
@@ -92,7 +92,7 @@ public class AuthController {
         }
     }
 
-    // Test endpoint to check if auth is working
+    // Testing endpoint to check if auth is working
     @GetMapping("/test-auth")
     public ResponseEntity<?> testAuth() {
         Map<String, Object> response = new HashMap<>();
