@@ -49,7 +49,6 @@ public class Customer {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "salesRepEmployeeNumber")
-    // Ensure no cascade to avoid persisting transient Employee
     private Employee salesRepEmployeeNumber;
 
     @Column(name = "creditLimit", precision = 10, scale = 2)
