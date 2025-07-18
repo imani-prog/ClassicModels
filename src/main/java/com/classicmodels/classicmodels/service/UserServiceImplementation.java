@@ -2,6 +2,7 @@ package com.classicmodels.classicmodels.service;
 
 import com.classicmodels.classicmodels.dto.LoginDto;
 import com.classicmodels.classicmodels.dto.LoginResponseDto;
+import com.classicmodels.classicmodels.dto.PasswordResetDto;
 import com.classicmodels.classicmodels.dto.RegistrationDto;
 import com.classicmodels.classicmodels.dto.UserDto;
 import com.classicmodels.classicmodels.entities.User;
@@ -11,13 +12,16 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,7 @@ public class UserServiceImplementation implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final UserIdGenerator userIdGenerator;
+    private final EmailService emailService;
 
     private static final String SECRET_KEY = "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970";
     private static final long JWT_EXPIRATION = 1000 * 60 * 60 * 24; // 24 hours
@@ -138,5 +143,62 @@ public class UserServiceImplementation implements UserService {
                     + Character.digit(s.charAt(i + 1), 16));
         }
         return data;
+    }
+
+    @Override
+    public void initiatePasswordReset(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found with email: " + email));
+
+        // Generate reset token
+        String resetToken = generateResetToken();
+
+        // Set token and expiry (1 hour from now)
+        user.setResetToken(resetToken);
+        user.setResetTokenExpiry(LocalDateTime.now().plusHours(1));
+
+        userRepository.save(user);
+
+        // Send email
+        emailService.sendPasswordResetEmail(email, resetToken);
+
+        log.info("Password reset initiated for email: {}", email);
+    }
+
+    @Override
+    public void resetPassword(PasswordResetDto passwordResetDto) {
+        // Validate passwords match
+        if (!passwordResetDto.getNewPassword().equals(passwordResetDto.getConfirmPassword())) {
+            throw new RuntimeException("Passwords do not match");
+        }
+
+        // Find user by reset token
+        User user = userRepository.findByResetToken(passwordResetDto.getToken())
+            .orElseThrow(() -> new RuntimeException("Invalid reset token"));
+
+        // Check if token is expired
+        if (user.getResetTokenExpiry().isBefore(LocalDateTime.now())) {
+            throw new RuntimeException("Reset token has expired");
+        }
+
+        // Update password
+        user.setPassword(passwordEncoder.encode(passwordResetDto.getNewPassword()));
+        user.setResetToken(null);
+        user.setResetTokenExpiry(null);
+
+        userRepository.save(user);
+
+        log.info("Password reset successful for user: {}", user.getEmail());
+    }
+
+    @Override
+    public boolean isValidResetToken(String token) {
+        return userRepository.findByResetToken(token)
+            .map(user -> user.getResetTokenExpiry().isAfter(LocalDateTime.now()))
+            .orElse(false);
+    }
+
+    private String generateResetToken() {
+        return UUID.randomUUID().toString().replace("-", "");
     }
 }

@@ -2,6 +2,8 @@ package com.classicmodels.classicmodels.controllers;
 
 import com.classicmodels.classicmodels.dto.LoginDto;
 import com.classicmodels.classicmodels.dto.LoginResponseDto;
+import com.classicmodels.classicmodels.dto.PasswordResetDto;
+import com.classicmodels.classicmodels.dto.PasswordResetRequestDto;
 import com.classicmodels.classicmodels.dto.RegistrationDto;
 import com.classicmodels.classicmodels.dto.UserDto;
 import com.classicmodels.classicmodels.service.UserService;
@@ -68,7 +70,6 @@ public class AuthController {
         }
     }
 
-    // Testing endpoint to verify user data and permissions
     @GetMapping("/verify-role")
     public ResponseEntity<?> verifyUserRole(@RequestParam String email) {
         log.info("Role verification request for email: {}", email);
@@ -92,13 +93,51 @@ public class AuthController {
         }
     }
 
-    // Testing endpoint to check if auth is working
     @GetMapping("/test-auth")
     public ResponseEntity<?> testAuth() {
         Map<String, Object> response = new HashMap<>();
         response.put("message", "Auth endpoint is working");
         response.put("timestamp", System.currentTimeMillis());
         response.put("server", "Spring Boot Backend");
+        return ResponseEntity.ok(response);
+    }
+
+    // Password Reset Endpoints
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@Valid @RequestBody PasswordResetRequestDto request) {
+        log.info("Password reset request received for email: {}", request.getEmail());
+        try {
+            userService.initiatePasswordReset(request.getEmail());
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password reset email sent successfully");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            log.error("Password reset request failed: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<?> resetPassword(@Valid @RequestBody PasswordResetDto passwordResetDto) {
+        log.info("Password reset attempt with token: {}", passwordResetDto.getToken());
+        try {
+            userService.resetPassword(passwordResetDto);
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Password reset successful");
+            return ResponseEntity.ok(response);
+        } catch (RuntimeException e) {
+            log.error("Password reset failed: {}", e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/validate-reset-token")
+    public ResponseEntity<?> validateResetToken(@RequestParam String token) {
+        log.info("Validating reset token: {}", token);
+        boolean isValid = userService.isValidResetToken(token);
+        Map<String, Object> response = new HashMap<>();
+        response.put("valid", isValid);
+        response.put("message", isValid ? "Token is valid" : "Token is invalid or expired");
         return ResponseEntity.ok(response);
     }
 }

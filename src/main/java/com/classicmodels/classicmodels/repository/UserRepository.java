@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<User, String> {
 
     Optional<User> findByEmailAndEnabled(String email, boolean enabled);
 
+    Optional<User> findByResetToken(String resetToken);
+
     @Query("SELECT u.id FROM User u WHERE u.role = :role ORDER BY u.id DESC LIMIT 1")
     String findLastIdByRole(@Param("role") User.Role role);
 }
