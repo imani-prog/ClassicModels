@@ -13,6 +13,7 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
+                    "/api/auth/login",
                     "/api/auth/forgot-password",
                     "/api/auth/reset-password",
                     "/api/auth/validate-reset-token"
