@@ -19,7 +19,7 @@ public class OfficeController {
     @PostMapping("/save")
     public ResponseEntity<Office> saveOffice(@RequestBody Office office) {
         Office savedOffice = officeService.saveOffice(office);
-        return ResponseEntity.ok(new Office());
+        return ResponseEntity.ok(savedOffice);
     }
 
     @GetMapping

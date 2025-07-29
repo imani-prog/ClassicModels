@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -16,11 +17,6 @@ public class OfficeServiceImplementation implements  OfficeService {
     //private Logger log;
 
 
-//    @Override
-//    public Office saveOffice(Office office) {
-//        office.setOfficeCode(generateOfficeId());
-//        return officeRepository.save(office);
-//    }
 
     @Override
     public Office saveOffice(Office office) {
@@ -37,22 +33,9 @@ public class OfficeServiceImplementation implements  OfficeService {
 
 
 
-//    @Override
-//    public Office saveOffice(Office office) {
-//        office.setOfficeCode(generateOfficeId());
-//        log.info("\nSaving office with code: {}", office.getOfficeCode());
-//        return officeRepository.save(office);
-//    }
-
-
     @Override
     public String generateOfficeId() {
-        String officeCode =  "OFF"+ String.valueOf(System.currentTimeMillis());
-        if (officeCode.length() > 10) {
-            return officeCode.substring(0, 10);
-        } else {
-            return officeCode;
-        }
+        return "OFF" + UUID.randomUUID().toString().replace("-", "").substring(0, 10).toUpperCase();
     }
 
     @Override
@@ -78,11 +61,6 @@ public class OfficeServiceImplementation implements  OfficeService {
         officeRepository.deleteById(officeCode);
     }
 
-
-//    @Override
-//    public String generateOfficeId() {
-//        return "OFF-"+ String.valueOf(System.currentTimeMillis());
-//    }
 
     @Override
     public Office updateOffice(String id, Office officeDetails) {

@@ -16,7 +16,7 @@ import lombok.Setter;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Office {
     @Id
-    @Column(name = "officeCode", nullable = false, length = 10)
+    @Column(name = "officeCode", nullable = false, length = 36)
     private String officeCode;
 
     @Column(name = "city", nullable = false, length = 50)
